@@ -13,8 +13,15 @@
       :dark="step === 1"
     />
     <div class="results" v-if="results && !loading && step === 1">
-      <Item v-for="item in results" :item="item" :key="item.data[0].nasa_id" />
+      <Item
+        v-for="item in results"
+        :item="item"
+        :key="item.data[0].nasa_id"
+        @click.native="handleModalOpen(item)"
+      />
     </div>
+    <Modal v-if="modalOpen" :item="modalData" @closeModal="modalOpen = false" />
+    <Loader v-if="loading && step === 1" />
   </div>
 </template>
 <script>
@@ -24,6 +31,8 @@ import HeroImage from './components/HeroImage';
 import Claim from './components/Claim';
 import SearchInput from './components/SearchInput';
 import Item from './components/Item';
+import Modal from './components/Modal';
+import Loader from './components/Loader';
 
 const API = 'https://images-api.nasa.gov/search';
 export default {
@@ -33,9 +42,13 @@ export default {
     Claim,
     SearchInput,
     Item,
+    Modal,
+    Loader,
   },
   data() {
     return {
+      modalOpen: false,
+      modalData: null,
       loading: false,
       step: 0,
       searchValue: '',
@@ -43,6 +56,10 @@ export default {
     };
   },
   methods: {
+    handleModalOpen(item) {
+      this.modalOpen = true;
+      this.modalData = item;
+    },
     handleInput: debounce(function fetchApi() {
       this.loading = true;
       axios
@@ -115,6 +132,9 @@ body {
 }
 
 .results {
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
   width: 80%;
   display: grid;
   grid-template-columns: 1fr;
