@@ -1,15 +1,19 @@
 <template>
-  <div class="app">
-    <div :class="[{ flexStart: step === 1 }, 'wrapper']">
-      <transition>
-        <HeroImage v-if="step === 0" />
-      </transition>
-      <Claim v-if="step === 0" />
-      <SearchInput
-        v-model="searchValue"
-        @input="handleInput"
-        :dark="step === 1"
-      />
+  <div :class="[{ flexStart: step === 1 }, 'wrapper']">
+    <transition name="logoSlide">
+      <img src="./assets/logo.svg" class="logo" v-if="step === 1" />
+    </transition>
+    <transition name="backgroundFade">
+      <HeroImage v-if="step === 0" />
+    </transition>
+    <Claim v-if="step === 0" />
+    <SearchInput
+      v-model="searchValue"
+      @input="handleInput"
+      :dark="step === 1"
+    />
+    <div class="results" v-if="results && !loading && step === 1">
+      <Item v-for="item in results" :item="item" :key="item.data[0].nasa_id" />
     </div>
   </div>
 </template>
@@ -19,6 +23,7 @@ import debounce from 'lodash.debounce';
 import HeroImage from './components/HeroImage';
 import Claim from './components/Claim';
 import SearchInput from './components/SearchInput';
+import Item from './components/Item';
 
 const API = 'https://images-api.nasa.gov/search';
 export default {
@@ -27,6 +32,7 @@ export default {
     HeroImage,
     Claim,
     SearchInput,
+    Item,
   },
   data() {
     return {
@@ -67,7 +73,28 @@ body {
   padding: 0;
 }
 
+.backgroundFade-enter-active,
+.backgroundFade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.backgroundFade-enter,
+.backgroundFade-leave-to {
+  opacity: 0;
+}
+
+.logoSlide-enter-active,
+.logoSlide-leave-active {
+  transition: margin-top 0.5s ease;
+}
+
+.logoSlide-enter,
+.logoSlide-leave-to {
+  margin-top: -50px;
+}
+
 .wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -79,6 +106,26 @@ body {
 
   &.flexStart {
     justify-content: flex-start;
+  }
+}
+
+.logo {
+  position: absolute;
+  top: 40px;
+}
+
+.results {
+  width: 80%;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 </style>
