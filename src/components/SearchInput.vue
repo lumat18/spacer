@@ -23,7 +23,7 @@ export default {
   input {
     height: 30px;
     border: 0;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid white;
     background: none;
   }
 }
