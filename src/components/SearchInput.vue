@@ -1,16 +1,22 @@
 <template>
   <div class="searchWrapper">
-    <input
-      id="search"
-      name="search"
-      v-model="searchValue"
-      @input="handleInput"
-    />
+    <input id="search" name="search" :value="value" @input="handleChange" />
   </div>
 </template>
 <script>
 export default {
   name: 'SearchInput',
+  props: {
+    value: {
+      type: String,
+      required: true,
+    },
+  },
+  methods: {
+    handleChange(e) {
+      this.$emit('input', e.target.value);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
@@ -28,12 +34,17 @@ export default {
     font-weight: 300;
     border: 0;
     border-bottom: 1px solid white;
+    transition: box-shadow 0.5s ease-out;
     background: none;
+
+    @media (min-width: 1024px) {
+      font-weight: 400;
+    }
   }
 
   input:focus {
     outline: none;
-    box-shadow: 0 5px 10px -8px white;
+    box-shadow: 0 8px 10px -8px white;
   }
 }
 </style>

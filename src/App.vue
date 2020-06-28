@@ -3,7 +3,7 @@
     <div class="wrapper">
       <HeroImage />
       <Claim />
-      <SearchInput />
+      <SearchInput v-model="searchValue" @input="handleInput" />
     </div>
   </div>
 </template>
@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     handleInput: debounce(function fetchApi() {
+      console.log(this.searchValue);
       axios
         .get(`${API}?q=${this.searchValue}&media_type=image`)
         .then((response) => {
@@ -48,6 +49,8 @@ export default {
 
 * {
   box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 body {
   font-family: 'Montserrat', sans-serif;
