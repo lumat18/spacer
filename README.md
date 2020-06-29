@@ -9,3 +9,7 @@ This app uses NASA image API to fetch images and display them after passing sear
 ```
 npm run serve
 ```
+
+### Deploy
+
+https://wizardly-edison-245e78.netlify.app
